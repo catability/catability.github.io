@@ -1,6 +1,17 @@
 <html>
-  <head></head>
-  <body>
-    <script src="./watermelon.js"></script>
-  </body>
+
+<head>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <script type="module">
+        import { App } from "./watermelon.js"
+
+        window.onload = () => {
+            new App()
+        }
+    </script>
+</body>
+
 </html>
