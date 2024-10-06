@@ -1,4 +1,4 @@
-import { Fruit } from "./script/fruit"
+import { Fruit } from "./fruit"
 
 export class App {
     constructor() {
