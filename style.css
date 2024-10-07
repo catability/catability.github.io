@@ -19,3 +19,9 @@ canvas {
     border: 8px solid black;
     border-radius: 16px;
 }
+
+div {
+    font-size: 30px;
+    text-align: center;
+    margin: 20 0;
+}

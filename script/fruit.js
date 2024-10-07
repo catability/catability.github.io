@@ -1,3 +1,5 @@
+import { Score } from "./score.js"
+
 const Fruits = [
     { name: "체리", color: "#F00A0A", radius: 25 },
     { name: "딸기", color: "#FF6E4B", radius: 31 },
@@ -13,7 +15,7 @@ const Fruits = [
 ]
 
 export class Fruit {
-    constructor(id, x = 300, y = 100) {
+    constructor(id, x = 300, y = 100, dx = 0, dy = 0) {
         this.id = id
 
         this.name = Fruits[this.id].name
@@ -23,8 +25,8 @@ export class Fruit {
         this.x = x
         this.y = y
 
-        this.dx = 0
-        this.dy = 0
+        this.dx = dx
+        this.dy = dy
 
         this.collisionCount = 0
     }
@@ -64,6 +66,8 @@ export class Fruit {
     }
 
     acc(gravity, friction, restitution, canvasWidth, canvasHeight) {
+        this.dx *= restitution
+        this.dy *= restitution
 
         if (this.collisionCount <= 2) {
             this.dy += gravity
@@ -96,5 +100,92 @@ export class Fruit {
         this.y += this.dy
 
         this.collisionCount = 0
+    }
+
+    static randomFruit(fruits) {
+        let num = Math.floor(fruits.length / 5)
+        let random = Math.min(Math.floor(Math.random() * (num + 2)), 4)
+        return random
+    }
+
+    static collisionCheck(fruits, canvasWidth, canvasHeight) {
+        for (let i = 0; i < fruits.length - 1; i++) {
+            let f1 = fruits[i]
+            if (f1.x >= canvasWidth - f1.r || f1.x <= f1.r) {
+                f1.collisionCount++
+            }
+            if (f1.y >= canvasHeight - f1.r) {
+                f1.collisionCount++
+            }
+
+            for (let j = i + 1; j < fruits.length; j++) {
+                let f2 = fruits[j]
+                let d2 = Math.pow(f1.x - f2.x, 2) + Math.pow(f1.y - f2.y, 2)
+
+                if (d2 < Math.pow(f1.r + f2.r, 2)) {
+                    if (f1.id == f2.id) {
+                        Fruit.mergeFruits(fruits, i, j)
+                        continue
+                    }
+
+                    f1.collisionCount++
+                    f2.collisionCount++
+
+                    let d = Math.sqrt(d2)
+                    let overlap = f1.r + f2.r - d
+                    let normalX = (f1.x - f2.x) / d
+                    let normalY = (f1.y - f2.y) / d
+
+                    f1.x += overlap * normalX * 0.5
+                    f1.y += overlap * normalY * 0.5
+                    f2.x -= overlap * normalX * 0.5
+                    f2.y -= overlap * normalY * 0.5
+
+                    if (f1.x == f2.x) {
+                        if (f1.y > f2.y) {
+                            f1.x += 0.2
+                            f2.x -= 0.2
+                        } else {
+                            f1.x -= 0.2
+                            f2.x += 0.2
+                        }
+                    }
+
+                    let radian = Math.atan2(f1.y - f2.y, f1.x - f2.x)
+
+                    let v1 = f1.vector()
+                    let v2 = f2.vector()
+                    let t1 = f1.theta()
+                    let t2 = f2.theta()
+
+                    let dx1 = (2 * v2 * Math.cos(t2 - radian)) / 2 * Math.cos(radian) + v1 * Math.sin(t1 - radian) * Math.cos(radian + Math.PI / 2)
+                    let dy1 = (2 * v2 * Math.cos(t2 - radian)) / 2 * Math.sin(radian) + v1 * Math.sin(t1 - radian) * Math.sin(radian + Math.PI / 2)
+                    let dx2 = (2 * v1 * Math.cos(t1 - radian)) / 2 * Math.cos(radian) + v2 * Math.sin(t2 - radian) * Math.cos(radian + Math.PI / 2)
+                    let dy2 = (2 * v1 * Math.cos(t1 - radian)) / 2 * Math.sin(radian) + v2 * Math.sin(t2 - radian) * Math.sin(radian + Math.PI / 2)
+
+                    f1.dx = dx1
+                    f1.dy = dy1
+                    f2.dx = dx2
+                    f2.dy = dy2
+                }
+            }
+        }
+    }
+
+    static mergeFruits(fruits, i, j) {
+        let f1 = fruits[i]
+        let f2 = fruits[j]
+
+        Score.scoreUpdate(f1.r / 10)
+
+        let id = Math.min(f1.id + 1, Fruits.length - 1)
+
+        let nx = (f1.x + f2.x) / 2
+        let ny = (f1.y + f2.y) / 2
+        let ndx = f1.dx + f2.dx
+        let ndy = f1.dy + f2.dy
+
+        fruits[i] = new Fruit(id, nx, ny, ndx, ndy)
+        fruits.splice(j, 1)
     }
 }
