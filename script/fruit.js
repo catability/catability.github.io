@@ -15,7 +15,7 @@ const Fruits = [
 ]
 
 export class Fruit {
-    constructor(id, x = 300, y = 100, dx = 0, dy = 0) {
+    constructor(id = 0, x = 300, y = 100, dx = 0, dy = 0) {
         this.id = id
 
         this.name = Fruits[this.id].name

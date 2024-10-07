@@ -77,10 +77,10 @@ export class App {
     }
 
     frame() {
-        this.ctx.fillStyle = "#F0DCCD"
+        this.ctx.fillStyle = "rgb(240, 220, 205)"//"#F0DCCD"
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
 
-        this.tempFruit.drawPlusLine()
+        this.tempFruit.drawPlusLine(this.ctx, this.canvas.height)
         Fruit.collisionCheck(this.fruits, this.canvas.width, this.canvas.height)
         for (let i = 0; i < this.fruits.length; i++) {
             this.fruits[i].update(this.ctx, this.gravity, this.friction, this.restitution, this.canvas.width, this.canvas.height)
@@ -88,14 +88,22 @@ export class App {
 
         this.highOverCheck()
         Score.mergeCombo = 0
+
+        console.log(this.ctx.fillStyle)
     }
 
     startFrameInterval() {
-        this.frameInterval = setInterval(this.frame, 1000 / 60);
+        this.frameInterval = setInterval(this.frame.bind(this), 1000 / 60);
     }
 
     clearFrameInterval() {
         clearInterval(this.frameInterval)
+    }
+
+    handleKeyDown(e) {
+        if (e.key == "q") {
+            this.clearFrameInterval()
+        }
     }
 
     handleMouseDown(e) {
@@ -103,21 +111,24 @@ export class App {
         this.tempFruit = new Fruit(Fruit.randomFruit(this.fruits), e.offsetX)
     }
     handleMouseMove(e) {
-        if (e.offsetX >= this.tempFruit.r && e.offsetX <= this.canvas.width - this.tempFruit.r) {
+        if (e.offsetX >= this.tempFruit.radius && e.offsetX <= this.canvas.width - this.tempFruit.radius) {
             this.tempFruit.x = e.offsetX
         }
     }
 
     startUserInput() {
-        this.canvas.addEventListener("mousedown", this.handleMouseDown)
-        this.canvas.addEventListener("mousemove", this.handleMouseMove)
+        document.addEventListener("keydown", this.handleKeyDown.bind(this))
+        this.canvas.addEventListener("mousedown", this.handleMouseDown.bind(this))
+        this.canvas.addEventListener("mousemove", this.handleMouseMove.bind(this))
     }
     stopUserInput() {
+        document.removeEventListener("keydown", this.handleKeyDown)
         this.canvas.removeEventListener("mousedown", this.handleMouseDown)
         this.canvas.removeEventListener("mousemove", this.handleMouseMove)
     }
 }
 
 window.onload = () => {
-    new App()
+    let app = new App()
+    console.log(app.ctx)
 }
