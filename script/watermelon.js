@@ -1,134 +1,132 @@
 import { Fruit } from "./fruit.js"
 import { Score } from "./score.js"
 
-export class App {
-    constructor() {
-        this.canvas = document.createElement("canvas")
-        this.ctx = this.canvas.getContext("2d")
-        this.ctxInit()
+const canvas = document.createElement("canvas")
+document.body.appendChild(canvas)
 
-        document.body.appendChild(this.canvas)
+const ctx = canvas.getContext("2d")
+ctxInit()
 
-        window.addEventListener("resize", this.resize.bind(this))
-        this.resize()
+window.addEventListener("resize", resize)
+resize()
 
-        this.gravity = 0.5
-        this.friction = 0.85
-        this.restitution = 0.8
+const gravity = 0.5
+const friction = 0.85
+const restitution = 0.8
 
-        this.tempFruit = new Fruit()
-        this.fruits = []
-        this.highOverTime = 0
+let tempFruit = new Fruit()
+const fruits = []
 
-        this.frameInterval = null
+let highOverTime = 0
 
-        this.startFrameInterval()
-        this.startUserInput()
-    }
+let frameInterval = null
 
-    ctxInit() {
-        this.ctx.lineWidth = 2
-        this.ctx.textAlign = "center"
-        this.ctx.textBaseline = "middle"
-    }
+function Play() {
+    Score.initScoreBoard()
+    startFrameInterval()
+    startUserInput()
+}
 
-    resize() {
-        this.canvas.width = 600
-        this.canvas.height = 800
-        this.canvas.style.margin = ` 10 ${(window.innerWidth - this.canvas.width) / 2 - 10}`
-    }
+function ctxInit() {
+    ctx.lineWidth = 2
+    ctx.textAlign = "center"
+    ctx.textBaseline = "middle"
+}
 
-    highOverCheck() {
-        let highOver = false
-        for (let i = 0; i < this.fruits.length; i++) {
-            if (this.fruits[i].y - this.fruits[i].r < 100) {
-                highOver = true
-                break
-            }
-        }
-        if (highOver) {
-            this.highOverTime++
-            if (this.highOverTime >= 60 && this.highOverTime < 60 * 6) {
-                this.ctx.beginPath()
-                this.ctx.moveTo(0, 100)
-                this.ctx.lineTo(this.canvas.width, 100)
-                this.ctx.stroke()
-            } else if (this.highOverTime >= 60 * 6) {
-                this.gameOver()
-            }
-        } else {
-            this.highOverTime = 0
+function resize() {
+    canvas.width = 600
+    canvas.height = 800
+    canvas.style.margin = `0 ${(window.innerWidth - canvas.width - 20) / 2 - 10}`
+}
+
+function highOverCheck() {
+    let highOver = false
+    for (let i = 0; i < fruits.length; i++) {
+        if (fruits[i].y - fruits[i].radius < 100) {
+            highOver = true
+            break
         }
     }
-
-    gameOver() {
-        this.clearFrameInterval()
-        this.stopUserInput()
-        this.ctx.fillStyle = "white"
-        this.ctx.fillRect(0, this.canvas.height / 3, this.canvas.width, this.canvas.height / 3)
-        this.ctx.strokeRect(0, this.canvas.height / 3, this.canvas.width, this.canvas.height / 3)
-        this.ctx.font = "60px gothic"
-        this.ctx.fillStyle = "black"
-        this.ctx.fillText("Game Over", this.canvas.width / 2, this.canvas.height / 2 - 35)
-        this.ctx.font = "30px gothic"
-        this.ctx.fillText(`Best score: ${Math.floor(Score.bestScore)}점`, this.canvas.width / 2, this.canvas.height / 2 + 35)
-        this.ctx.fillText(`Your score: ${Math.floor(Score.score)}점`, this.canvas.width / 2, this.canvas.height / 2 + 70)
-        Score.setScore()
-    }
-
-    frame() {
-        this.ctx.fillStyle = "rgb(240, 220, 205)"//"#F0DCCD"
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
-
-        this.tempFruit.drawPlusLine(this.ctx, this.canvas.height)
-        Fruit.collisionCheck(this.fruits, this.canvas.width, this.canvas.height)
-        for (let i = 0; i < this.fruits.length; i++) {
-            this.fruits[i].update(this.ctx, this.gravity, this.friction, this.restitution, this.canvas.width, this.canvas.height)
+    if (highOver) {
+        highOverTime++
+        if (highOverTime >= 60 && highOverTime < 60 * 6) {
+            ctx.beginPath()
+            ctx.moveTo(0, 100)
+            ctx.lineTo(canvas.width, 100)
+            ctx.stroke()
+        } else if (highOverTime >= 60 * 6) {
+            gameOver()
         }
-
-        this.highOverCheck()
-        Score.mergeCombo = 0
-
-        console.log(this.ctx.fillStyle)
-    }
-
-    startFrameInterval() {
-        this.frameInterval = setInterval(this.frame.bind(this), 1000 / 60);
-    }
-
-    clearFrameInterval() {
-        clearInterval(this.frameInterval)
-    }
-
-    handleKeyDown(e) {
-        if (e.key == "q") {
-            this.clearFrameInterval()
-        }
-    }
-
-    handleMouseDown(e) {
-        this.fruits.push(this.tempFruit)
-        this.tempFruit = new Fruit(Fruit.randomFruit(this.fruits), e.offsetX)
-    }
-    handleMouseMove(e) {
-        if (e.offsetX >= this.tempFruit.radius && e.offsetX <= this.canvas.width - this.tempFruit.radius) {
-            this.tempFruit.x = e.offsetX
-        }
-    }
-
-    startUserInput() {
-        document.addEventListener("keydown", this.handleKeyDown.bind(this))
-        this.canvas.addEventListener("mousedown", this.handleMouseDown.bind(this))
-        this.canvas.addEventListener("mousemove", this.handleMouseMove.bind(this))
-    }
-    stopUserInput() {
-        document.removeEventListener("keydown", this.handleKeyDown)
-        this.canvas.removeEventListener("mousedown", this.handleMouseDown)
-        this.canvas.removeEventListener("mousemove", this.handleMouseMove)
+    } else {
+        highOverTime = 0
     }
 }
 
+function gameOver() {
+    clearFrameInterval()
+    stopUserInput()
+    ctx.fillStyle = "white"
+    ctx.fillRect(0, canvas.height / 3, canvas.width, canvas.height / 3)
+    ctx.strokeRect(0, canvas.height / 3, canvas.width, canvas.height / 3)
+    ctx.font = "60px gothic"
+    ctx.fillStyle = "black"
+    ctx.fillText("Game Over", canvas.width / 2, canvas.height / 2 - 35)
+    ctx.font = "30px gothic"
+    ctx.fillText(`Best score: ${Math.floor(Score.bestScore)}점`, canvas.width / 2, canvas.height / 2 + 35)
+    ctx.fillText(`Your score: ${Math.floor(Score.score)}점`, canvas.width / 2, canvas.height / 2 + 70)
+    Score.setScore()
+}
+
+function frame() {
+    ctx.fillStyle = "rgb(240, 220, 205)"//"#F0DCCD"
+    ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+    tempFruit.drawPlusLine(ctx, canvas.height)
+    Fruit.collisionCheck(fruits, canvas.width, canvas.height, restitution)
+    for (let i = 0; i < fruits.length; i++) {
+        fruits[i].update(ctx, gravity, friction, canvas.width, canvas.height)
+    }
+
+    highOverCheck()
+    Score.mergeCombo = 0
+}
+
+function startFrameInterval() {
+    frameInterval = setInterval(frame.bind(this), 1000 / 60);
+}
+
+function clearFrameInterval() {
+    clearInterval(frameInterval)
+}
+
+function handleKeyDown(e) {
+    if (e.key == "q") {
+        clearFrameInterval()
+    }
+}
+
+function handleMouseDown(e) {
+    fruits.push(tempFruit)
+    tempFruit = new Fruit(Fruit.randomFruit(fruits), e.offsetX)
+}
+function handleMouseMove(e) {
+    if (e.offsetX >= tempFruit.radius && e.offsetX <= canvas.width - tempFruit.radius) {
+        tempFruit.x = e.offsetX
+    }
+}
+
+function startUserInput() {
+    document.addEventListener("keydown", handleKeyDown)
+    canvas.addEventListener("mousedown", handleMouseDown)
+    canvas.addEventListener("mousemove", handleMouseMove)
+}
+function stopUserInput() {
+    document.removeEventListener("keydown", handleKeyDown)
+    canvas.removeEventListener("mousedown", handleMouseDown)
+    canvas.removeEventListener("mousemove", handleMouseMove)
+}
+
+
 window.onload = () => {
-    let app = new App()
-    console.log(app.ctx)
+    Play()
 }

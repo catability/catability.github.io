@@ -31,8 +31,8 @@ export class Fruit {
         this.collisionCount = 0
     }
 
-    update(ctx, gravity, friction, restitution, canvasWidth, canvasHeight) {
-        this.acc(gravity, friction, restitution, canvasWidth, canvasHeight)
+    update(ctx, gravity, friction, canvasWidth, canvasHeight) {
+        this.acc(gravity, friction, canvasWidth, canvasHeight)
         this.draw(ctx)
     }
 
@@ -65,10 +65,7 @@ export class Fruit {
         this.draw(ctx)
     }
 
-    acc(gravity, friction, restitution, canvasWidth, canvasHeight) {
-        this.dx *= restitution
-        this.dy *= restitution
-
+    acc(gravity, friction, canvasWidth, canvasHeight) {
         if (this.collisionCount <= 2) {
             this.dy += gravity
         } else {
@@ -83,16 +80,16 @@ export class Fruit {
         let posX = this.x + this.dx
         let posY = this.y + this.dy
 
-        if (posX > canvasWidth - this.r) {
-            this.x = canvasWidth - this.r
+        if (posX > canvasWidth - this.radius) {
+            this.x = canvasWidth - this.radius
             this.dx = -this.dx
-        } else if (posX < this.r) {
-            this.x = this.r
+        } else if (posX < this.radius) {
+            this.x = this.radius
             this.dx = -this.dx
         }
-        if (posY >= canvasHeight - this.r) {
+        if (posY >= canvasHeight - this.radius) {
             this.dx *= friction
-            this.y = canvasHeight - this.r
+            this.y = canvasHeight - this.radius
             this.dy = 0
         }
 
@@ -108,13 +105,13 @@ export class Fruit {
         return random
     }
 
-    static collisionCheck(fruits, canvasWidth, canvasHeight) {
+    static collisionCheck(fruits, canvasWidth, canvasHeight, restitution) {
         for (let i = 0; i < fruits.length - 1; i++) {
             let f1 = fruits[i]
-            if (f1.x >= canvasWidth - f1.r || f1.x <= f1.r) {
+            if (f1.x >= canvasWidth - f1.radius || f1.x <= f1.radius) {
                 f1.collisionCount++
             }
-            if (f1.y >= canvasHeight - f1.r) {
+            if (f1.y >= canvasHeight - f1.radius) {
                 f1.collisionCount++
             }
 
@@ -122,7 +119,7 @@ export class Fruit {
                 let f2 = fruits[j]
                 let d2 = Math.pow(f1.x - f2.x, 2) + Math.pow(f1.y - f2.y, 2)
 
-                if (d2 < Math.pow(f1.r + f2.r, 2)) {
+                if (d2 < Math.pow(f1.radius + f2.radius, 2)) {
                     if (f1.id == f2.id) {
                         Fruit.mergeFruits(fruits, i, j)
                         continue
@@ -132,7 +129,7 @@ export class Fruit {
                     f2.collisionCount++
 
                     let d = Math.sqrt(d2)
-                    let overlap = f1.r + f2.r - d
+                    let overlap = f1.radius + f2.radius - d
                     let normalX = (f1.x - f2.x) / d
                     let normalY = (f1.y - f2.y) / d
 
@@ -158,10 +155,10 @@ export class Fruit {
                     let t1 = f1.theta()
                     let t2 = f2.theta()
 
-                    let dx1 = (2 * v2 * Math.cos(t2 - radian)) / 2 * Math.cos(radian) + v1 * Math.sin(t1 - radian) * Math.cos(radian + Math.PI / 2)
-                    let dy1 = (2 * v2 * Math.cos(t2 - radian)) / 2 * Math.sin(radian) + v1 * Math.sin(t1 - radian) * Math.sin(radian + Math.PI / 2)
-                    let dx2 = (2 * v1 * Math.cos(t1 - radian)) / 2 * Math.cos(radian) + v2 * Math.sin(t2 - radian) * Math.cos(radian + Math.PI / 2)
-                    let dy2 = (2 * v1 * Math.cos(t1 - radian)) / 2 * Math.sin(radian) + v2 * Math.sin(t2 - radian) * Math.sin(radian + Math.PI / 2)
+                    let dx1 = (2 * v2 * Math.cos(t2 - radian)) / 2 * Math.cos(radian) + v1 * Math.sin(t1 - radian) * Math.cos(radian + Math.PI / 2) * restitution
+                    let dy1 = (2 * v2 * Math.cos(t2 - radian)) / 2 * Math.sin(radian) + v1 * Math.sin(t1 - radian) * Math.sin(radian + Math.PI / 2) * restitution
+                    let dx2 = (2 * v1 * Math.cos(t1 - radian)) / 2 * Math.cos(radian) + v2 * Math.sin(t2 - radian) * Math.cos(radian + Math.PI / 2) * restitution
+                    let dy2 = (2 * v1 * Math.cos(t1 - radian)) / 2 * Math.sin(radian) + v2 * Math.sin(t2 - radian) * Math.sin(radian + Math.PI / 2) * restitution
 
                     f1.dx = dx1
                     f1.dy = dy1
@@ -176,7 +173,7 @@ export class Fruit {
         let f1 = fruits[i]
         let f2 = fruits[j]
 
-        Score.scoreUpdate(f1.r / 10)
+        Score.scoreUpdate(f1.radius / 10)
 
         let id = Math.min(f1.id + 1, Fruits.length - 1)
 

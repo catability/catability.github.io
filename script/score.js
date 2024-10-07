@@ -6,7 +6,8 @@ export const Score = {
 
     initScoreBoard() {
         this.scoreBoard = document.createElement("div")
-        scoreBoard.innerText = `${this.score}점`
+        document.body.prepend(this.scoreBoard)
+        this.scoreBoard.innerText = `${Math.floor(this.score)}점`
     },
 
     getScore() {
@@ -27,6 +28,6 @@ export const Score = {
     scoreUpdate(plusScore) {
         this.mergeCombo++
         this.score += (plusScore * plusScore + this.mergeCombo)
-        this.scoreBoard.innerText = `${this.score}점`
+        this.scoreBoard.innerText = `${Math.floor(this.score)}점`
     },
 }

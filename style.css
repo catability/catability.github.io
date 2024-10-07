@@ -16,12 +16,11 @@ body {
 }
 
 canvas {
-    border: 8px solid black;
-    border-radius: 16px;
+    border: 6px solid black;
+    border-radius: 18px;
 }
 
 div {
     font-size: 30px;
     text-align: center;
-    margin: 20 0;
 }
