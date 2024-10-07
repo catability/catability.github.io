@@ -2,10 +2,8 @@ import { Fruit } from "./fruit.js"
 import { Score } from "./score.js"
 
 const canvas = document.createElement("canvas")
-document.body.appendChild(canvas)
-
 const ctx = canvas.getContext("2d")
-ctxInit()
+document.body.appendChild(canvas)
 
 window.addEventListener("resize", resize)
 resize()
@@ -22,6 +20,7 @@ let highOverTime = 0
 let frameInterval = null
 
 function Play() {
+    ctxInit()
     Score.initScoreBoard()
     startFrameInterval()
     startUserInput()

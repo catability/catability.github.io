@@ -51,7 +51,7 @@ export class Fruit {
         ctx.fill()
         ctx.stroke()
 
-        ctx.font = `${this.radius / 2}px gothic`
+        ctx.font = `bold ${this.radius / 2}px serief`
         ctx.fillStyle = "black"
         ctx.fillText(this.name, this.x, this.y)
     }
