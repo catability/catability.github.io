@@ -8,6 +8,10 @@ export const Score = {
         this.scoreBoard = document.createElement("div")
         document.body.prepend(this.scoreBoard)
         this.scoreBoard.innerText = `${Math.floor(this.score)}점`
+
+        this.scoreBoard.addEventListener("click", () => {
+            window.location.reload()
+        })
     },
 
     getScore() {

@@ -22,6 +22,7 @@ let frameInterval = null
 function Play() {
     ctxInit()
     Score.initScoreBoard()
+    descript()
     startFrameInterval()
     startUserInput()
 }
@@ -36,6 +37,13 @@ function resize() {
     canvas.width = 600
     canvas.height = 800
     canvas.style.margin = `0 ${(window.innerWidth - canvas.width) / 2 - 10}`
+}
+
+function descript() {
+    let div=document.createElement("div")
+    div.innerText="점수 누르면 새로고침 가능"
+
+    document.body.appendChild(div)
 }
 
 function highOverCheck() {
