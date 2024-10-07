@@ -36,7 +36,7 @@ function ctxInit() {
 function resize() {
     canvas.width = 600
     canvas.height = 800
-    canvas.style.margin = `0 ${(window.innerWidth - canvas.width - 20) / 2 - 10}`
+    canvas.style.margin = `0 ${(window.innerWidth - canvas.width) / 2 - 10}`
 }
 
 function highOverCheck() {
@@ -119,6 +119,7 @@ function startUserInput() {
     document.addEventListener("keydown", handleKeyDown)
     canvas.addEventListener("mousedown", handleMouseDown)
     canvas.addEventListener("mousemove", handleMouseMove)
+    canvas.addEventListener("touchmove", handleMouseMove)
 }
 function stopUserInput() {
     document.removeEventListener("keydown", handleKeyDown)
