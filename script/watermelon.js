@@ -18,8 +18,8 @@ function adjustCanvasSize() {
     }
 }
 
-adjustCanvasSize();
-window.addEventListener("resize", adjustCanvasSize);
+// adjustCanvasSize();
+// window.addEventListener("resize", adjustCanvasSize);
 
 const gravity = 0.5
 const friction = 0.85
