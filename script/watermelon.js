@@ -115,15 +115,29 @@ function handleMouseMove(e) {
     }
 }
 
+function handleTouchStart(e) {
+    fruits.push(tempFruit)
+    tempFruit = new Fruit(Fruit.randomFruit(fruits), e.touches[0].clientX)
+}
+function handleTouchMove(e) {
+    if (e.touches[0].clientX >= tempFruit.radius && e.touches[0].clientX <= canvas.width - tempFruit.radius) {
+        tempFruit.x = e.touches[0].clientX
+    }
+}
+
 function startUserInput() {
     document.addEventListener("keydown", handleKeyDown)
     canvas.addEventListener("mousedown", handleMouseDown)
     canvas.addEventListener("mousemove", handleMouseMove)
+    canvas.addEventListener("touchstart", handleTouchStart)
+    canvas.addEventListener("touchmove", handleTouchMove)
 }
 function stopUserInput() {
     document.removeEventListener("keydown", handleKeyDown)
     canvas.removeEventListener("mousedown", handleMouseDown)
     canvas.removeEventListener("mousemove", handleMouseMove)
+    canvas.removeEventListener("touchstart", handleTouchStart)
+    canvas.removeEventListener("touchmove", handleTouchMove)
 }
 
 
