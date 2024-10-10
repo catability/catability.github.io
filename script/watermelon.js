@@ -115,7 +115,7 @@ function handleMouseMove(e) {
     }
 }
 
-function handleTouchStart(e) {
+function handleTouchEnd(e) {
     fruits.push(tempFruit)
     tempFruit = new Fruit(Fruit.randomFruit(fruits), e.touches[0].clientX)
 }
@@ -129,14 +129,14 @@ function startUserInput() {
     document.addEventListener("keydown", handleKeyDown)
     canvas.addEventListener("mousedown", handleMouseDown)
     canvas.addEventListener("mousemove", handleMouseMove)
-    canvas.addEventListener("touchstart", handleTouchStart)
+    canvas.addEventListener("touchstart", handleTouchEnd)
     canvas.addEventListener("touchmove", handleTouchMove)
 }
 function stopUserInput() {
     document.removeEventListener("keydown", handleKeyDown)
     canvas.removeEventListener("mousedown", handleMouseDown)
     canvas.removeEventListener("mousemove", handleMouseMove)
-    canvas.removeEventListener("touchstart", handleTouchStart)
+    canvas.removeEventListener("touchstart", handleTouchEnd)
     canvas.removeEventListener("touchmove", handleTouchMove)
 }
 
