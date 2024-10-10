@@ -5,6 +5,7 @@ export const Score = {
     scoreBoard: null,
 
     initScoreBoard() {
+        this.getScore()
         this.scoreBoard = document.createElement("div")
         document.body.prepend(this.scoreBoard)
         this.scoreBoard.innerText = `${Math.floor(this.score)}점`

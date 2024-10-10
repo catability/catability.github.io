@@ -2,11 +2,10 @@ import { Fruit } from "./fruit.js"
 import { Score } from "./score.js"
 
 const canvas = document.createElement("canvas")
+canvas.width = 600
+canvas.height = 800
 const ctx = canvas.getContext("2d")
 document.body.appendChild(canvas)
-
-window.addEventListener("resize", resize)
-resize()
 
 const gravity = 0.5
 const friction = 0.85
@@ -33,15 +32,9 @@ function ctxInit() {
     ctx.textBaseline = "middle"
 }
 
-function resize() {
-    canvas.width = 600
-    canvas.height = 800
-    canvas.style.margin = `0 ${(window.innerWidth - canvas.width) / 2 - 10}`
-}
-
 function descript() {
-    let div=document.createElement("div")
-    div.innerText="점수 누르면 새로고침 가능"
+    let div = document.createElement("div")
+    div.innerText = "점수 누르면 새로고침 가능"
 
     document.body.appendChild(div)
 }
