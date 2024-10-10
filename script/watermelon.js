@@ -120,13 +120,19 @@ function handleKeyDown(e) {
     }
 }
 
+
+let isMoblie = /Mobi|Android/i.test(navigator.userAgent)
+
 function handleMouseDown(e) {
+    if (isMoblie) return
     fruits.push(tempFruit)
     tempFruit = new Fruit(Fruit.randomFruit(fruits), e.offsetX)
 }
 function handleMouseMove(e) {
-    if (e.offsetX >= tempFruit.radius && e.offsetX <= canvas.width - tempFruit.radius) {
-        tempFruit.x = e.offsetX
+    if (isMoblie) return
+    const x = e.offsetX || e.touches[0].clientX
+    if (x >= tempFruit.radius && x <= canvas.width - tempFruit.radius) {
+        tempFruit.x = x
     }
 }
 
@@ -135,17 +141,20 @@ function handleTouchEnd(e) {
     tempFruit = new Fruit(Fruit.randomFruit(fruits), e.touches[0].clientX)
 }
 function handleTouchMove(e) {
-    if (e.touches[0].clientX >= tempFruit.radius && e.touches[0].clientX <= canvas.width - tempFruit.radius) {
-        tempFruit.x = e.touches[0].clientX
+    const x = e.touches[0].clientX
+    if (x >= tempFruit.radius && x <= canvas.width - tempFruit.radius) {
+        tempFruit.x = x
     }
 }
+
+
 
 function startUserInput() {
     document.addEventListener("keydown", handleKeyDown)
     canvas.addEventListener("mousedown", handleMouseDown)
     canvas.addEventListener("mousemove", handleMouseMove)
-    canvas.addEventListener("touchend", handleTouchEnd)
-    canvas.addEventListener("touchmove", handleTouchMove)
+    document.addEventListener("touchend", handleTouchEnd)
+    document.addEventListener("touchmove", handleTouchMove)
 }
 function stopUserInput() {
     document.removeEventListener("keydown", handleKeyDown)
