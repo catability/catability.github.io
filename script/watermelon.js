@@ -7,6 +7,20 @@ canvas.height = 800
 const ctx = canvas.getContext("2d")
 document.body.appendChild(canvas)
 
+function adjustCanvasSize() {
+    if (window.innerWidth >= canvas.width && window.innerHeight >= canvas.height) {
+        // canvas.style.width = "600px";
+        // canvas.style.height = "800px";
+    } else {
+        const scale = Math.min(window.innerWidth / canvas.width, window.innerHeight / canvas.height);
+        canvas.style.width = `${canvas.width * scale}px`;
+        canvas.style.height = `${canvas.height * scale}px`;
+    }
+}
+
+adjustCanvasSize();
+window.addEventListener("resize", adjustCanvasSize);
+
 const gravity = 0.5
 const friction = 0.85
 const restitution = 0.8
@@ -41,8 +55,9 @@ function descript() {
 
 function highOverCheck() {
     let highOver = false
+    let high = canvas.height / 8
     for (let i = 0; i < fruits.length; i++) {
-        if (fruits[i].y - fruits[i].radius < 100) {
+        if (fruits[i].y - fruits[i].radius < high) {
             highOver = true
             break
         }
@@ -51,8 +66,8 @@ function highOverCheck() {
         highOverTime++
         if (highOverTime >= 60 && highOverTime < 60 * 6) {
             ctx.beginPath()
-            ctx.moveTo(0, 100)
-            ctx.lineTo(canvas.width, 100)
+            ctx.moveTo(0, high)
+            ctx.lineTo(canvas.width, high)
             ctx.stroke()
         } else if (highOverTime >= 60 * 6) {
             gameOver()
