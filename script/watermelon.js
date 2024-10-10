@@ -129,14 +129,14 @@ function startUserInput() {
     document.addEventListener("keydown", handleKeyDown)
     canvas.addEventListener("mousedown", handleMouseDown)
     canvas.addEventListener("mousemove", handleMouseMove)
-    canvas.addEventListener("touchstart", handleTouchEnd)
+    canvas.addEventListener("touchend", handleTouchEnd)
     canvas.addEventListener("touchmove", handleTouchMove)
 }
 function stopUserInput() {
     document.removeEventListener("keydown", handleKeyDown)
     canvas.removeEventListener("mousedown", handleMouseDown)
     canvas.removeEventListener("mousemove", handleMouseMove)
-    canvas.removeEventListener("touchstart", handleTouchEnd)
+    canvas.removeEventListener("touchend", handleTouchEnd)
     canvas.removeEventListener("touchmove", handleTouchMove)
 }
 
