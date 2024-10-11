@@ -141,7 +141,8 @@ function handleTouchEnd(e) {
     tempFruit = new Fruit(Fruit.randomFruit(fruits))
 }
 function handleTouchMove(e) {
-    const x = e.touches[0].clientX
+    const canvasRect = canvas.getBoundingClientRect();
+    const x = e.touches[0].clientX - canvasRect.left;
     if (x >= tempFruit.radius && x <= canvas.width - tempFruit.radius) {
         tempFruit.x = x
     }
