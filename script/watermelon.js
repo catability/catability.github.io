@@ -19,7 +19,6 @@ function adjustCanvasSize() {
     }
 }
 
-adjustCanvasSize();
 window.addEventListener("resize", adjustCanvasSize);
 
 const gravity = 0.5
@@ -35,6 +34,7 @@ let frameInterval = null
 
 function Play() {
     ctxInit()
+    adjustCanvasSize();
     Score.initScoreBoard()
     descript()
     startFrameInterval()
