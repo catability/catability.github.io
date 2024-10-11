@@ -8,18 +8,19 @@ const ctx = canvas.getContext("2d")
 document.body.appendChild(canvas)
 
 function adjustCanvasSize() {
+    const ratio = canvas.height / canvas.width
     if (window.innerWidth >= canvas.width && window.innerHeight >= canvas.height) {
         // canvas.style.width = "600px";
         // canvas.style.height = "800px";
     } else {
-        const scale = Math.min(window.innerWidth / canvas.width, window.innerHeight / canvas.height);
-        canvas.style.width = `${canvas.width * scale}px`;
-        canvas.style.height = `${canvas.height * scale}px`;
+        const scale = Math.min(window.innerWidth / canvas.width, window.innerHeight / (canvas.height + 100));
+        canvas.style.width = `${canvas.width * scale - 100}px`;
+        canvas.style.height = `${canvas.height * scale - 100 * ratio}px`;
     }
 }
 
-// adjustCanvasSize();
-// window.addEventListener("resize", adjustCanvasSize);
+adjustCanvasSize();
+window.addEventListener("resize", adjustCanvasSize);
 
 const gravity = 0.5
 const friction = 0.85
