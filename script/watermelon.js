@@ -138,7 +138,7 @@ function handleMouseMove(e) {
 
 function handleTouchEnd(e) {
     fruits.push(tempFruit)
-    tempFruit = new Fruit(Fruit.randomFruit(fruits), e.touches[0].clientX)
+    tempFruit = new Fruit(Fruit.randomFruit(fruits))
 }
 function handleTouchMove(e) {
     const x = e.touches[0].clientX
