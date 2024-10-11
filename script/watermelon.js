@@ -143,10 +143,14 @@ function handleTouchEnd(e) {
 }
 function handleTouchMove(e) {
     const canvasRect = canvas.getBoundingClientRect();
-    const x = e.touches[0].clientX - canvasRect.left;
-    if (x >= tempFruit.radius && x <= canvas.width - tempFruit.radius) {
-        tempFruit.x = x
+    const x = e.touches[0].clientX
+    if (x >= canvasRect.left + tempFruit.radius && x <= canvasRect.right - tempFruit.radius) {
+        tempFruit.x = x - canvasRect.left
     }
+    // const x = e.touches[0].clientX - canvasRect.left;
+    // if (x >= tempFruit.radius && x <= canvas.width - tempFruit.radius) {
+    //     tempFruit.x = x
+    // }
 }
 
 
